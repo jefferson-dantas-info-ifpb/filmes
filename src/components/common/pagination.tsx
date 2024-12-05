@@ -1,4 +1,12 @@
-export function Pagination({ page, pageCount }: { page: number; pageCount: number }) {
+export function Pagination({
+  page,
+  pageCount,
+  isSearch = false
+}: {
+  page: number
+  pageCount: number
+  isSearch?: boolean
+}) {
   return (
     <div className="flex items-center justify-between border-t border-gray-700 px-4 py-3 sm:px-6 mt-4">
       <div className="flex flex-1 items-center justify-between">
@@ -10,23 +18,23 @@ export function Pagination({ page, pageCount }: { page: number; pageCount: numbe
 
         <div>
           <nav className="isolate inline-flex -space-x-px rounded-md shadow-sm" aria-label="Pagination">
-            <GoToPreviousPage page={page} />
-            <GoToPage page={1} current={page === 1} />
-            <GoToPage page={2} current={page === 2} />
-            <GoToPage page={3} current={page === 3} />
+            <GoToPreviousPage page={page} isSearch={isSearch} />
+            <GoToPage page={1} current={page === 1} isSearch={isSearch} />
+            <GoToPage page={2} current={page === 2} isSearch={isSearch} />
+            <GoToPage page={3} current={page === 3} isSearch={isSearch} />
             {page <= 3 || page >= pageCount - 2 ? (
               <MorePages />
             ) : (
               <>
                 <MorePages />
-                <GoToPage page={page} current />
+                <GoToPage page={page} current isSearch={isSearch} />
                 <MorePages />
               </>
             )}
-            <GoToPage page={pageCount - 2} current={page === pageCount - 2} />
-            <GoToPage page={pageCount - 1} current={page === pageCount - 1} />
-            <GoToPage page={pageCount} current={page === pageCount} />
-            <GoToNextPage page={page} />
+            <GoToPage page={pageCount - 2} current={page === pageCount - 2} isSearch={isSearch} />
+            <GoToPage page={pageCount - 1} current={page === pageCount - 1} isSearch={isSearch} />
+            <GoToPage page={pageCount} current={page === pageCount} isSearch={isSearch} />
+            <GoToNextPage page={page} isSearch={isSearch} />
           </nav>
         </div>
       </div>
@@ -34,10 +42,10 @@ export function Pagination({ page, pageCount }: { page: number; pageCount: numbe
   )
 }
 
-export function GoToPreviousPage({ page }: { page: number }) {
+export function GoToPreviousPage({ page, isSearch }: { page: number; isSearch: boolean }) {
   return (
     <a
-      href={`/page/${page - 1}`}
+      href={isSearch ? `/search/${page - 1}${location.search}` : `/page/${page - 1}`}
       className="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-600 hover:bg-gray-900 focus:z-20 focus:outline-offset-0"
     >
       <span className="sr-only">Previous</span>
@@ -52,10 +60,10 @@ export function GoToPreviousPage({ page }: { page: number }) {
   )
 }
 
-export function GoToNextPage({ page }: { page: number }) {
+export function GoToNextPage({ page, isSearch }: { page: number; isSearch: boolean }) {
   return (
     <a
-      href={`/page/${page + 1}`}
+      href={isSearch ? `/search/${page + 1}${location.search}` : `/page/${page + 1}`}
       className="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-600 hover:bg-gray-900 focus:z-20 focus:outline-offset-0"
     >
       <span className="sr-only">Next</span>
@@ -70,10 +78,10 @@ export function GoToNextPage({ page }: { page: number }) {
   )
 }
 
-export function GoToPage({ page, current }: { page: number; current?: boolean }) {
+export function GoToPage({ page, current, isSearch }: { page: number; current?: boolean; isSearch: boolean }) {
   return (
     <a
-      href={`/page/${page}`}
+      href={isSearch ? `/search/${page}${location.search}` : `/page/${page}`}
       aria-current="page"
       className={`relative z-10 inline-flex items-center px-4 py-2 text-sm font-semibold focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 ${
         current

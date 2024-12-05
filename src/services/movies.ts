@@ -23,3 +23,16 @@ export const getMovieDetails = async (movieId: number) => {
 
   return data
 }
+
+export const searchMovies = async (query: string, page = 1) => {
+  const { data } = await api.get<GetMoviesAPIResponse>('search/movie', {
+    params: {
+      api_key: import.meta.env.VITE_TMDB_API_KEY,
+      language: 'pt-BR',
+      query,
+      page
+    }
+  })
+
+  return data
+}
